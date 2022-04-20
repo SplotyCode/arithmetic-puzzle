@@ -6,10 +6,13 @@ function renderPuzzle(data) {
     const puzzle = $("#puzzle")
     puzzle.empty()
     puzzle.append(number.render({number: data.numbers[0]}))
+    var expresion = data.numbers[0]
     for (var i = 0; i < data.operators.length; i++) {
+        expresion += data.operators[i] + data.numbers[i + 1]
         puzzle.append(operator.render({operator: data.operators[i]}))
         puzzle.append(number.render({number: data.numbers[i + 1]}))
     }
+    console.log(expresion)
     $(".operator").on('click', (a) => console.log(a))
     console.log($(".operator"))
     puzzle.append(result.render({result: data.result}))

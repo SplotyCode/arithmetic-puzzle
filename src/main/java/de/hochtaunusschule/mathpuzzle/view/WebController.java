@@ -1,6 +1,10 @@
 package de.hochtaunusschule.mathpuzzle.view;
 
 import de.hochtaunusschule.mathpuzzle.math.Operator;
+import de.hochtaunusschule.mathpuzzle.versuch2.Expression;
+import de.hochtaunusschule.mathpuzzle.versuch2.ExpressionCombination;
+import de.hochtaunusschule.mathpuzzle.versuch2.ExpressionGenerator;
+import java.util.Arrays;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
@@ -17,22 +21,34 @@ public class WebController {
     @Getter
     @Accessors(fluent = false)
     @RequiredArgsConstructor
-    static class Puzzle {
-        private final int[] numbers;
+    public static class Puzzle {
+        private final long[] numbers;
         private final String[] operators;
-        private final int result;
+        private final long result;
+    }
+
+    private Expression expression(int operands) {
+        int numbers = operands + 1;
+        if (operands <= 7) {
+            ExpressionGenerator left = new ExpressionGenerator(numbers);
+            return left.generate().pickAny();
+        }
+        int leftPlaces = numbers / 2;
+        int rightPlaces = leftPlaces + numbers % 2;
+        ExpressionGenerator left = new ExpressionGenerator(leftPlaces);
+        ExpressionGenerator right = new ExpressionGenerator(rightPlaces);
+        return ExpressionCombination.combine(left, right);
     }
 
     @GetMapping(value = "/api/puzzle", produces = MediaType.APPLICATION_JSON_VALUE)
     public Puzzle randomPuzzle(@RequestParam("operands") int operands) {
-        int[] numbers = new int[operands + 1];
-        String[] operators = new String[operands];
-        for (int i = 0; i < numbers.length; i++) {
-            numbers[i] = (int) (Math.random() * 10);
-        }
-        for (int i = 0; i < operands; i++) {
-            operators[i] = Operator.values()[(int) (Math.random() * 4)].symbolAsString();
-        }
-        return new Puzzle(numbers, operators, (int) (Math.random() * 100));
+        long took = System.currentTimeMillis();
+        Expression expression = expression(operands);
+        System.out.println("Took: " + (System.currentTimeMillis() - took));
+        return new Puzzle(
+            expression.numbers(),
+            Arrays.stream(expression.operators()).map(Operator::symbolAsString).toArray(String[]::new),
+            expression.result()
+        );
     }
 }

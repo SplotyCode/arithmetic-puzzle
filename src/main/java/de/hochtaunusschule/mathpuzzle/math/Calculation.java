@@ -54,7 +54,7 @@ public class Calculation {
         return false;
     }
 
-    private boolean validateDivide(long left, long right) {
+    public static boolean validateDivide(long left, long right) {
         return right == 0 || left % right != 0;
     }
 
