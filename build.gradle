@@ -1,0 +1,39 @@
+plugins {
+    id 'application'
+    id 'org.springframework.boot' version '2.6.4'
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+}
+
+group 'org.example'
+version '1.0-SNAPSHOT'
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+    implementation 'com.google.guava:guava:29.0-jre'
+    implementation group: 'org.ow2.asm', name: 'asm', version: '7.0'
+    implementation group: 'org.ow2.asm', name: 'asm-util', version: '9.2'
+    compileOnly 'org.projectlombok:lombok:1.18.22'
+    annotationProcessor 'org.projectlombok:lombok:1.18.22'
+
+    testCompileOnly 'org.projectlombok:lombok:1.18.22'
+    testAnnotationProcessor 'org.projectlombok:lombok:1.18.22'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation group: 'org.apache.commons', name: 'commons-text', version: '1.9'
+
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+}
+
+bootRun {
+    jvmArgs = ["-DXmx4G", "-Xmx4G"]
+}
+
+test {
+    useJUnitPlatform()
+}
+application {
+    mainClass = 'de.hochtaunusschule.mathpuzzle.Main'
+}

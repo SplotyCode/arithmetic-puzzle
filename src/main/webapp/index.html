@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/html">
+<head>
+    <title>Rechenrätsel</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container">
+    <div class="row">
+        <!--<div class="col-xs-8 col-xs-offset-2">-->
+            <h1>Rechenrätsel</h1>
+            <div id="puzzle"></div>
+            <div class="input-group">
+                <input type="hidden" name="search_param" value="all" id="search_param">
+                <input type="number" class="form-control" name="input" id="operators" placeholder="Operatoren" value="5">
+                <span class="input-group-btn">
+                    <button class="btn btn-default" id="fetch">
+                        <span class="glyphicon glyphicon-refresh"></span>
+                    </button>
+                </span>
+            </div>
+            <h3>Regeln</h3>
+            <ul>
+                <li>Es gibt immer nur eine Lösung</li>
+                <li>Es gibt Punkt- vor Strich ansonsten von Links nach Rechts</li>
+                <li>Einzelne Operanden haben nur eine Ziffa (0 - 9)</li>
+                <li>Ergebnis und Lösung muss ganzzahlig sein</li>
+                <li>Das Ergenis ist immer positiv</li>
+            </ul>
+        <!--</div>-->
+    </div>
+</div>
+<script id="template-number" type="text/x-jsrender">
+    <span>{{:number}}</span>
+</script>
+<script id="template-operator" type="text/x-jsrender">
+    <select class="form-select" class="operator" data-solution="{{:operator}}">
+      <option selected></option>
+      <option value="+">+</option>
+      <option value="-">-</option>
+      <option value="*">*</option>
+      <option value="/">/</option>
+    </select>
+</script>
+<script id="template-result" type="text/x-jsrender">
+    <span>= {{:result}}</span>
+</script>
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://www.jsviews.com/download/jsrender.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
