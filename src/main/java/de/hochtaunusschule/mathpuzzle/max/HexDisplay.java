@@ -11,6 +11,7 @@ public interface HexDisplay {
     int DOWN_LEFT = 16;
     int DOWN_MID = 32;
     int DOWN_RIGHT = 64;
+
     int FULL_LEFT = DOWN_LEFT | UP_LEFT;
     int FULL_RIGHT = DOWN_RIGHT | UP_RIGHT;
 

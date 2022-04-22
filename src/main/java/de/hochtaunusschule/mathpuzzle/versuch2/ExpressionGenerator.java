@@ -2,6 +2,7 @@ package de.hochtaunusschule.mathpuzzle.versuch2;
 
 import de.hochtaunusschule.mathpuzzle.math.Calculation;
 import de.hochtaunusschule.mathpuzzle.math.Operator;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -26,9 +27,14 @@ public class ExpressionGenerator {
     }
 
     private void fillRandom() {
-        for (int i = 0; i < numbers.length; i++) {
-            numbers[i] = random.nextInt(10);
+        numbers[0] = random.nextInt(9) + 1;
+        do {
+            numbers[1] = random.nextInt(9) + 1;
+        } while (numbers[0] % numbers[1] != 0);
+        for (int i = 2; i < numbers.length; i++) {
+            numbers[i] = random.nextInt(9) + 1;
         }
+        System.out.println("Using: " + Arrays.toString(numbers));
     }
 
     private ExpressionCandidates export() {
@@ -47,15 +53,20 @@ public class ExpressionGenerator {
         return export();
     }
 
+    private static long tryied;
+    private static long good;
+
     public ExpressionCandidates generate() {
-        duplicatedResults.clear();
-        results.clear();
-        while (results.size() == 0) {
+        do {
             duplicatedResults.clear();
             results.clear();
             fillRandom();
             generateOperators(0);
-        }
+            tryied++;
+        } while (results.size() == 0);
+        System.out.println("^^ was good");
+        good++;
+        System.out.println(good + " / " + tryied + " " + (good / (float) tryied));
         return export();
     }
 

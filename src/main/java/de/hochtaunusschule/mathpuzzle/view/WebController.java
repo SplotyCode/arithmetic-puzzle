@@ -4,6 +4,7 @@ import de.hochtaunusschule.mathpuzzle.math.Operator;
 import de.hochtaunusschule.mathpuzzle.versuch2.Expression;
 import de.hochtaunusschule.mathpuzzle.versuch2.ExpressionCombination;
 import de.hochtaunusschule.mathpuzzle.versuch2.ExpressionGenerator;
+import de.hochtaunusschule.mathpuzzle.versuch3.Generator;
 import java.util.Arrays;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -29,10 +30,10 @@ public class WebController {
 
     private Expression expression(int operands) {
         int numbers = operands + 1;
-        if (operands <= 7) {
+        /*if (operands <= 7) {
             ExpressionGenerator left = new ExpressionGenerator(numbers);
             return left.generate().pickAny();
-        }
+        }*/
         int leftPlaces = numbers / 2;
         int rightPlaces = leftPlaces + numbers % 2;
         ExpressionGenerator left = new ExpressionGenerator(leftPlaces);
@@ -43,7 +44,7 @@ public class WebController {
     @GetMapping(value = "/api/puzzle", produces = MediaType.APPLICATION_JSON_VALUE)
     public Puzzle randomPuzzle(@RequestParam("operands") int operands) {
         long took = System.currentTimeMillis();
-        Expression expression = expression(operands);
+        Expression expression = Generator.generate(operands);
         System.out.println("Took: " + (System.currentTimeMillis() - took));
         return new Puzzle(
             expression.numbers(),

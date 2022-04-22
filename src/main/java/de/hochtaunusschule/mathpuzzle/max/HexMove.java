@@ -19,12 +19,12 @@ public interface HexMove extends HexBinary {
         }
     }
 
-    static Change change(int left, int right) {
+    static Change change(int current, int desired) {
         int remove = 0;
         int add = 0;
         for (int bit : HexBinary.BITS) {
-            boolean hasLeft = HexBinary.state(bit, left);
-            boolean hasRight = HexBinary.state(bit, right);
+            boolean hasLeft = HexBinary.state(bit, current);
+            boolean hasRight = HexBinary.state(bit, desired);
             if (hasLeft && !hasRight) {
                 remove++;
             } else if (!hasLeft && hasRight) {

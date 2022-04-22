@@ -16,8 +16,6 @@ import org.apache.commons.lang3.ArrayUtils;
 public class ExpressionCombination {
     @RequiredArgsConstructor
     private static class Term {
-        private final long left;
-        private final long right;
         private final Operator[] leftOperators;
         private final Operator[] rightOperators;
         private final Operator operator;
@@ -68,22 +66,29 @@ public class ExpressionCombination {
 
     public static Expression combine(Set<Long> leftSideCandidates, ExpressionCandidates left, ExpressionCandidates right) {
         DuplicateTracker<Term> duplicateTracker = new DuplicateTracker<>();
+        System.out.println("try: " + Arrays.toString(left.numbers()) + " with " + Arrays.toString(right.numbers()));
         long[] numbers = ArrayUtils.addAll(left.numbers(), right.numbers());
-        for (Map.Entry<Long, Operator[]> a : left.uniqueResults().entrySet()) {
+        /*for (Map.Entry<Long, Operator[]> a : left.uniqueResults().entrySet()) {
             for (Map.Entry<Long, Operator[]> b : right.uniqueResults().entrySet()) {
                 long sum = a.getKey() + b.getKey();
                 long negate = a.getKey() - b.getKey();
                 if (sum > 0) {
+                    System.out.println("adding candidate " + sum + " " + a.getKey() + " plus " + b.getKey() + " " +
+                        Arrays.toString(a.getValue()) + " " +
+                        Arrays.toString(b.getValue()));
                     duplicateTracker.track(sum, new Term(a.getKey(), b.getKey(), a.getValue(), b.getValue(), Operator.ADD));
                 }
                 if (negate > 0) {
+                    System.out.println("adding candidate " + negate + " " + + a.getKey() + " minus " + b.getKey() + " " +
+                        Arrays.toString(a.getValue()) + " " +
+                        Arrays.toString(b.getValue()));
                     duplicateTracker.track(negate, new Term(a.getKey(), b.getKey(), a.getValue(), b.getValue(), Operator.SUBTRACT));
                 }
             }
         }
         if (duplicateTracker.results().isEmpty()) {
             return null;
-        }
+        }*/
         ExpressionGenerator generator = new ExpressionGenerator(right.numbers().length + 1);
         long[] number = generator.numbers();
         System.arraycopy(right.numbers(), 0, number, 1, right.numbers().length);
@@ -94,14 +99,17 @@ public class ExpressionCombination {
                 continue;
             }
             for (long possibleResult : candidates.uniqueResults().keySet()) {
+                if (possibleResult > 0) {
+                    //duplicateTracker.track(possibleResult, new Term());
+                }
+
                 duplicateTracker.invalidate(possibleResult);
             }
         }
         if (duplicateTracker.results().isEmpty()) {
             return null;
         }
-        Map.Entry<Long, Term> result = duplicateTracker.results().entrySet().stream().max(
-            Comparator.comparingDouble(value -> value.getValue().interest())).get();
+        Map.Entry<Long, Term> result = duplicateTracker.results().entrySet().stream().max(Comparator.comparingDouble(value -> value.getValue().interest())).get();
         Term term = result.getValue();
         Operator[] operators = Arrays.copyOf(term.leftOperators, term.operators());
         operators[term.leftOperators.length] = term.operator;

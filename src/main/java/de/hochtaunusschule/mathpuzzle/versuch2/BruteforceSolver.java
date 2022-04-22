@@ -2,6 +2,7 @@ package de.hochtaunusschule.mathpuzzle.versuch2;
 
 import de.hochtaunusschule.mathpuzzle.math.Calculation;
 import de.hochtaunusschule.mathpuzzle.math.Operator;
+import de.hochtaunusschule.mathpuzzle.versuch4.ExpressionGenerator;
 import de.hochtaunusschule.mathpuzzle.view.WebController;
 import java.net.URLConnection;
 import java.util.Arrays;
@@ -10,7 +11,7 @@ import java.util.Arrays;
  * @author David (_Esel)
  */
 public class BruteforceSolver {
-    private static final Operator[] OPERATORS = Operator.values();
+    private static final Operator[] OPERATORS = new Operator[] {Operator.ADD, Operator.SUBTRACT, Operator.MULTIPLY, Operator.DIVIDE};
     private static final int MIN_OPERATOR_ID = 0;
     private static final int MAX_OPERATOR_ID = Operator.DIVIDE.ordinal();
     private final long[] numbers;
@@ -34,8 +35,7 @@ public class BruteforceSolver {
             }
             return;
         }
-        for (int i = MIN_OPERATOR_ID; i <= MAX_OPERATOR_ID; i++) {
-            Operator operator = OPERATORS[i];
+        for (Operator operator : OPERATORS) {
             operators[index] = operator;
             generateOperators(index + 1);
         }
@@ -44,10 +44,19 @@ public class BruteforceSolver {
     public static void main(String[] args) {
         WebController webController = new WebController();
         while (true) {
-            WebController.Puzzle puzzle = webController.randomPuzzle(14);
-            System.out.println("Result from api is " + Arrays.toString(puzzle.getOperators()));
-            BruteforceSolver solver = new BruteforceSolver(puzzle.getNumbers(), puzzle.getResult());
+        //    WebController.Puzzle puzzle = webController.randomPuzzle(15);
+          //  System.out.println("Result from api is " + Arrays.toString(puzzle.getOperators()) + " " + Arrays.toString(puzzle.getNumbers()) + " " + puzzle.getResult());
+            de.hochtaunusschule.mathpuzzle.versuch4.ExpressionGenerator
+                generator = new ExpressionGenerator(15);
+            long generate = System.currentTimeMillis();
+            Expression expression = generator.generate().pickAny();
+            long ended = System.currentTimeMillis();
+            System.out.println("Generated in " + (ended - generate));
+            System.out.println("testing " + Arrays.toString(expression.numbers()) + " " + expression.result() + " " +
+                Arrays.toString(expression.operators()));
+            BruteforceSolver solver = new BruteforceSolver(expression.numbers(), expression.result());
             solver.generateOperators(0);
+            System.out.println("tested in " + (System.currentTimeMillis() - ended));
         }
     }
 }
