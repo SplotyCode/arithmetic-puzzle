@@ -1,13 +1,12 @@
-package de.hochtaunusschule.mathpuzzle.versuch4;
+package de.hochtaunusschule.mathpuzzle.generate;
 
-import static de.hochtaunusschule.mathpuzzle.math.Operator.ADD;
-import static de.hochtaunusschule.mathpuzzle.math.Operator.DIVIDE;
-import static de.hochtaunusschule.mathpuzzle.math.Operator.MULTIPLY;
-import static de.hochtaunusschule.mathpuzzle.math.Operator.SUBTRACT;
+import static de.hochtaunusschule.mathpuzzle.bruteforce.Operator.ADD;
+import static de.hochtaunusschule.mathpuzzle.bruteforce.Operator.DIVIDE;
+import static de.hochtaunusschule.mathpuzzle.bruteforce.Operator.MULTIPLY;
+import static de.hochtaunusschule.mathpuzzle.bruteforce.Operator.SUBTRACT;
 import static org.junit.jupiter.api.Assertions.*;
 
-import de.hochtaunusschule.mathpuzzle.math.Operator;
-import java.util.Arrays;
+import de.hochtaunusschule.mathpuzzle.bruteforce.Operator;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -162,5 +161,4 @@ class ExpressionGeneratorTest {
             generateOperators(nextIndex, res, strokeStore, blockStore, false, addStroke);
         }
     }
-
 }

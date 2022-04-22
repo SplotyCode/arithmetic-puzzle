@@ -1,7 +1,7 @@
-package de.hochtaunusschule.mathpuzzle.versuch3;
+package de.hochtaunusschule.mathpuzzle.investigate;
 
-import de.hochtaunusschule.mathpuzzle.math.Calculation;
-import de.hochtaunusschule.mathpuzzle.math.Operator;
+import de.hochtaunusschule.mathpuzzle.bruteforce.Calculation;
+import de.hochtaunusschule.mathpuzzle.bruteforce.Operator;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -9,7 +9,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import org.checkerframework.checker.units.qual.C;
 
 /**
  * @author David (_Esel)

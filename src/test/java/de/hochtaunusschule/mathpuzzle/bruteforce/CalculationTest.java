@@ -1,6 +1,4 @@
-package de.hochtaunusschule.mathpuzzle.math;
-
-import static org.junit.jupiter.api.Assertions.*;
+package de.hochtaunusschule.mathpuzzle.bruteforce;
 
 import org.junit.jupiter.api.Test;
 

@@ -1,4 +1,4 @@
-package de.hochtaunusschule.mathpuzzle.math;
+package de.hochtaunusschule.mathpuzzle.investigate;
 
 import java.util.Arrays;
 

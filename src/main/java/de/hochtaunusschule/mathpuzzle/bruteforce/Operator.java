@@ -1,4 +1,4 @@
-package de.hochtaunusschule.mathpuzzle.math;
+package de.hochtaunusschule.mathpuzzle.bruteforce;
 
 import java.util.function.LongBinaryOperator;
 import lombok.Getter;

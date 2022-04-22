@@ -1,15 +1,9 @@
-package de.hochtaunusschule.mathpuzzle.versuch3;
+package de.hochtaunusschule.mathpuzzle.investigate;
 
-import de.hochtaunusschule.mathpuzzle.math.Calculation;
-import de.hochtaunusschule.mathpuzzle.math.Operator;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
-import java.util.Set;
 import lombok.RequiredArgsConstructor;
 
 /**

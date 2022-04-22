@@ -1,6 +1,6 @@
-package de.hochtaunusschule.mathpuzzle.versuch2;
+package de.hochtaunusschule.mathpuzzle.bruteforce;
 
-import de.hochtaunusschule.mathpuzzle.math.Operator;
+import de.hochtaunusschule.mathpuzzle.api.Expression;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;

@@ -1,10 +1,8 @@
-package de.hochtaunusschule.mathpuzzle.versuch2;
+package de.hochtaunusschule.mathpuzzle.bruteforce;
 
-import de.hochtaunusschule.mathpuzzle.math.Calculation;
-import de.hochtaunusschule.mathpuzzle.math.Operator;
-import de.hochtaunusschule.mathpuzzle.versuch4.ExpressionGenerator;
+import de.hochtaunusschule.mathpuzzle.api.Expression;
+import de.hochtaunusschule.mathpuzzle.generate.ExpressionGenerator;
 import de.hochtaunusschule.mathpuzzle.view.WebController;
-import java.net.URLConnection;
 import java.util.Arrays;
 
 /**
@@ -46,7 +44,7 @@ public class BruteforceSolver {
         while (true) {
         //    WebController.Puzzle puzzle = webController.randomPuzzle(15);
           //  System.out.println("Result from api is " + Arrays.toString(puzzle.getOperators()) + " " + Arrays.toString(puzzle.getNumbers()) + " " + puzzle.getResult());
-            de.hochtaunusschule.mathpuzzle.versuch4.ExpressionGenerator
+            de.hochtaunusschule.mathpuzzle.generate.ExpressionGenerator
                 generator = new ExpressionGenerator(15);
             long generate = System.currentTimeMillis();
             Expression expression = generator.generate().pickAny();
@@ -54,8 +52,8 @@ public class BruteforceSolver {
             System.out.println("Generated in " + (ended - generate));
             System.out.println("testing " + Arrays.toString(expression.numbers()) + " " + expression.result() + " " +
                 Arrays.toString(expression.operators()));
-            BruteforceSolver solver = new BruteforceSolver(expression.numbers(), expression.result());
-            solver.generateOperators(0);
+            //BruteforceSolver solver = new BruteforceSolver(new long[] {5 , 7 , 3 , 2 , 4 , 6 , 7 , 8 , 9 , 8 , 4}, 3890);
+            //solver.generateOperators(0);
             System.out.println("tested in " + (System.currentTimeMillis() - ended));
         }
     }

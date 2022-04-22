@@ -1,4 +1,4 @@
-package de.hochtaunusschule.mathpuzzle.math;
+package de.hochtaunusschule.mathpuzzle.api;
 
 /**
  * @author David (_Esel)

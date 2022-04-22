@@ -1,7 +1,7 @@
-package de.hochtaunusschule.mathpuzzle.versuch3;
+package de.hochtaunusschule.mathpuzzle.investigate;
 
-import de.hochtaunusschule.mathpuzzle.math.Operator;
-import de.hochtaunusschule.mathpuzzle.versuch2.Expression;
+import de.hochtaunusschule.mathpuzzle.bruteforce.Operator;
+import de.hochtaunusschule.mathpuzzle.api.Expression;
 import java.util.Arrays;
 import java.util.Random;
 

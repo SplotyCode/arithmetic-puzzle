@@ -1,7 +1,8 @@
-package de.hochtaunusschule.mathpuzzle.versuch2;
+package de.hochtaunusschule.mathpuzzle.investigate;
 
-import de.hochtaunusschule.mathpuzzle.math.Calculation;
-import de.hochtaunusschule.mathpuzzle.math.Operator;
+import de.hochtaunusschule.mathpuzzle.bruteforce.Calculation;
+import de.hochtaunusschule.mathpuzzle.bruteforce.ExpressionCandidates;
+import de.hochtaunusschule.mathpuzzle.bruteforce.Operator;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -12,7 +13,7 @@ import java.util.Set;
 /**
  * @author David (_Esel)
  */
-public class ExpressionGenerator {
+public class CombinationRandomNumber {
     private static final Operator[] OPERATORS = Operator.values();
     private static final int MAX_OPERATOR_ID = Operator.DIVIDE.ordinal();
     private static final Random random = new Random();
@@ -21,7 +22,7 @@ public class ExpressionGenerator {
     private final Set<Long> duplicatedResults = new HashSet<>();
     private final Map<Long, Operator[]> results = new HashMap<>();
 
-    public ExpressionGenerator(int places) {
+    public CombinationRandomNumber(int places) {
         numbers = new long[places];
         tempOperators = new Operator[places - 1];
     }
@@ -41,7 +42,7 @@ public class ExpressionGenerator {
         return new ExpressionCandidates(numbers.clone(), results);
     }
 
-    long[] numbers() {
+    public long[] numbers() {
         return numbers;
     }
 
@@ -94,7 +95,7 @@ public class ExpressionGenerator {
     }
 
     public static void main(String[] args) {
-        ExpressionGenerator generator = new ExpressionGenerator(15);
+        CombinationRandomNumber generator = new CombinationRandomNumber(15);
         while (true) {
             long start = System.currentTimeMillis();
             generator.generate();

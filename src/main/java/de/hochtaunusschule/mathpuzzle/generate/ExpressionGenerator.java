@@ -1,9 +1,9 @@
-package de.hochtaunusschule.mathpuzzle.versuch4;
+package de.hochtaunusschule.mathpuzzle.generate;
 
-import static de.hochtaunusschule.mathpuzzle.math.Operator.*;
+import static de.hochtaunusschule.mathpuzzle.bruteforce.Operator.*;
 
-import de.hochtaunusschule.mathpuzzle.math.Operator;
-import de.hochtaunusschule.mathpuzzle.versuch2.ExpressionCandidates;
+import de.hochtaunusschule.mathpuzzle.bruteforce.Operator;
+import de.hochtaunusschule.mathpuzzle.bruteforce.ExpressionCandidates;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;

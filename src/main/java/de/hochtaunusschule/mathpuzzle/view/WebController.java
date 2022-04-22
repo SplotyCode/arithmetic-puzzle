@@ -1,10 +1,8 @@
 package de.hochtaunusschule.mathpuzzle.view;
 
-import de.hochtaunusschule.mathpuzzle.math.Operator;
-import de.hochtaunusschule.mathpuzzle.versuch2.Expression;
-import de.hochtaunusschule.mathpuzzle.versuch2.ExpressionCombination;
-import de.hochtaunusschule.mathpuzzle.versuch2.ExpressionGenerator;
-import de.hochtaunusschule.mathpuzzle.versuch3.Generator;
+import de.hochtaunusschule.mathpuzzle.bruteforce.Operator;
+import de.hochtaunusschule.mathpuzzle.api.Expression;
+import de.hochtaunusschule.mathpuzzle.generate.ExpressionGenerator;
 import java.util.Arrays;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -28,23 +26,25 @@ public class WebController {
         private final long result;
     }
 
-    private Expression expression(int operands) {
+    /*private Expression expression(int operands) {
         int numbers = operands + 1;
-        /*if (operands <= 7) {
+        if (operands <= 7) {
             ExpressionGenerator left = new ExpressionGenerator(numbers);
             return left.generate().pickAny();
-        }*/
+        }
         int leftPlaces = numbers / 2;
         int rightPlaces = leftPlaces + numbers % 2;
         ExpressionGenerator left = new ExpressionGenerator(leftPlaces);
         ExpressionGenerator right = new ExpressionGenerator(rightPlaces);
         return ExpressionCombination.combine(left, right);
-    }
+    }*/
 
     @GetMapping(value = "/api/puzzle", produces = MediaType.APPLICATION_JSON_VALUE)
     public Puzzle randomPuzzle(@RequestParam("operands") int operands) {
         long took = System.currentTimeMillis();
-        Expression expression = Generator.generate(operands);
+        //Expression expression = Generator.generate(operands);
+        ExpressionGenerator generator = new ExpressionGenerator(operands);
+        Expression expression = generator.generate().pickAny();
         System.out.println("Took: " + (System.currentTimeMillis() - took));
         return new Puzzle(
             expression.numbers(),

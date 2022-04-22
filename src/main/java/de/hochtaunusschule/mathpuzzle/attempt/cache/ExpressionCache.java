@@ -1,19 +1,17 @@
-package de.hochtaunusschule.mathpuzzle.math;
+package de.hochtaunusschule.mathpuzzle.attempt.cache;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.HashMultiset;
 import com.google.common.collect.Ordering;
 import com.google.common.collect.TreeMultimap;
-import com.google.common.collect.TreeMultiset;
+import de.hochtaunusschule.mathpuzzle.api.PuzzleConstrains;
+import de.hochtaunusschule.mathpuzzle.bruteforce.Calculation;
+import de.hochtaunusschule.mathpuzzle.bruteforce.Operator;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
-import java.util.Set;
 
 /**
  * @author David (_Esel)

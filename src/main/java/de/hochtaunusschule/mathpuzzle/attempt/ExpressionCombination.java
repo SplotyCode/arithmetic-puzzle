@@ -1,7 +1,11 @@
-package de.hochtaunusschule.mathpuzzle.versuch2;
+package de.hochtaunusschule.mathpuzzle.attempt;
 
-import de.hochtaunusschule.mathpuzzle.math.Calculation;
-import de.hochtaunusschule.mathpuzzle.math.Operator;
+import de.hochtaunusschule.mathpuzzle.api.DuplicateTracker;
+import de.hochtaunusschule.mathpuzzle.api.Expression;
+import de.hochtaunusschule.mathpuzzle.bruteforce.Calculation;
+import de.hochtaunusschule.mathpuzzle.bruteforce.ExpressionCandidates;
+import de.hochtaunusschule.mathpuzzle.bruteforce.Operator;
+import de.hochtaunusschule.mathpuzzle.investigate.CombinationRandomNumber;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashSet;
@@ -51,7 +55,7 @@ public class ExpressionCombination {
         }
     }
 
-    public static Expression combine(ExpressionGenerator left, ExpressionGenerator right) {
+    public static Expression combine(CombinationRandomNumber left, CombinationRandomNumber right) {
         while (true) {
             ExpressionCandidates candidates = left.generate();
             Set<Long> leftSideCandidates = leftSideCandidates(candidates.numbers());
@@ -89,7 +93,7 @@ public class ExpressionCombination {
         if (duplicateTracker.results().isEmpty()) {
             return null;
         }*/
-        ExpressionGenerator generator = new ExpressionGenerator(right.numbers().length + 1);
+        CombinationRandomNumber generator = new CombinationRandomNumber(right.numbers().length + 1);
         long[] number = generator.numbers();
         System.arraycopy(right.numbers(), 0, number, 1, right.numbers().length);
         for (long leftSide : leftSideCandidates) {

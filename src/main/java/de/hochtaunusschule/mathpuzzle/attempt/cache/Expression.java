@@ -1,6 +1,7 @@
-package de.hochtaunusschule.mathpuzzle.math;
+package de.hochtaunusschule.mathpuzzle.attempt.cache;
 
 import com.google.common.collect.Multiset;
+import de.hochtaunusschule.mathpuzzle.bruteforce.Operator;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;

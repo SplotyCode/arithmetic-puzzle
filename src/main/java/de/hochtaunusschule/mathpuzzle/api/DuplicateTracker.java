@@ -1,4 +1,4 @@
-package de.hochtaunusschule.mathpuzzle.versuch2;
+package de.hochtaunusschule.mathpuzzle.api;
 
 import java.util.ArrayList;
 import java.util.HashMap;

@@ -1,6 +1,6 @@
-package de.hochtaunusschule.mathpuzzle.versuch2;
+package de.hochtaunusschule.mathpuzzle.api;
 
-import de.hochtaunusschule.mathpuzzle.math.Operator;
+import de.hochtaunusschule.mathpuzzle.bruteforce.Operator;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
