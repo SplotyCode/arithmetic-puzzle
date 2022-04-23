@@ -1,6 +1,7 @@
 package de.hochtaunusschule.mathpuzzle.max;
 
 import lombok.RequiredArgsConstructor;
+import lombok.ToString;
 
 /**
  * @author David (_Esel)
@@ -8,7 +9,10 @@ import lombok.RequiredArgsConstructor;
 public interface HexMove extends HexBinary {
     @RequiredArgsConstructor
     class Change {
-        public final int remove, add;
+        /* set -> not set */
+        public final int remove;
+        /* not set -> set */
+        private final int add;
 
         @Override
         public String toString() {
@@ -17,6 +21,25 @@ public interface HexMove extends HexBinary {
                 ", add=" + add +
                 '}';
         }
+    }
+
+    public static void main(String[] args) {
+        System.out.println(move(HexDisplay.DIGITS[2], HexDisplay.DIGITS[0]));
+    }
+
+    @ToString
+    @RequiredArgsConstructor
+    class Move {
+        public final int moves;
+        /* consumed from outside */
+        public final int fromOutside;
+    }
+
+    static Move move(int current, int desired) {
+        Change change = change(current, desired);
+        int remove = change.remove;
+        int add = change.add;
+        return new Move(add, add - remove);
     }
 
     static Change change(int current, int desired) {

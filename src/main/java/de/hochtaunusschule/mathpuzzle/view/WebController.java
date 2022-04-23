@@ -2,6 +2,7 @@ package de.hochtaunusschule.mathpuzzle.view;
 
 import de.hochtaunusschule.mathpuzzle.bruteforce.Operator;
 import de.hochtaunusschule.mathpuzzle.api.Expression;
+import de.hochtaunusschule.mathpuzzle.generate.AsyncExpressionGenerator;
 import de.hochtaunusschule.mathpuzzle.generate.ExpressionGenerator;
 import java.util.Arrays;
 import lombok.Getter;

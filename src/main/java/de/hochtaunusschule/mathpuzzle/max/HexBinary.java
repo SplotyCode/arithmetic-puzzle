@@ -28,6 +28,16 @@ public interface HexBinary extends HexDisplay{
         return difference;
     }
 
+    static int letterSize(int number) {
+        int size = 0;
+        for (int bit : BITS) {
+            if (state(bit, number)) {
+                size++;
+            }
+        }
+        return size;
+    }
+
     static int[] extractHex(String hex) {
         return hex
             .chars()
