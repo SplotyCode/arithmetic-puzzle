@@ -17,6 +17,8 @@ dependencies {
     implementation group: 'org.ow2.asm', name: 'asm-util', version: '9.2'
     compileOnly 'org.projectlombok:lombok:1.18.22'
     annotationProcessor 'org.projectlombok:lombok:1.18.22'
+    implementation group: 'net.sf.trove4j', name: 'trove4j', version: '3.0.3'
+
 
     testCompileOnly 'org.projectlombok:lombok:1.18.22'
     testAnnotationProcessor 'org.projectlombok:lombok:1.18.22'

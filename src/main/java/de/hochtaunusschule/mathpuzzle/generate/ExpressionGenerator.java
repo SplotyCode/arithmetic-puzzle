@@ -1,15 +1,17 @@
 package de.hochtaunusschule.mathpuzzle.generate;
 
-import static de.hochtaunusschule.mathpuzzle.bruteforce.Operator.*;
+import static de.hochtaunusschule.mathpuzzle.bruteforce.Operator.ADD;
+import static de.hochtaunusschule.mathpuzzle.bruteforce.Operator.DIVIDE;
+import static de.hochtaunusschule.mathpuzzle.bruteforce.Operator.MULTIPLY;
+import static de.hochtaunusschule.mathpuzzle.bruteforce.Operator.SUBTRACT;
 
+import de.hochtaunusschule.mathpuzzle.api.ExpressionCandidates;
 import de.hochtaunusschule.mathpuzzle.bruteforce.Operator;
-import de.hochtaunusschule.mathpuzzle.bruteforce.ExpressionCandidates;
-import java.util.Arrays;
+import gnu.trove.map.hash.TLongObjectHashMap;
+import gnu.trove.set.hash.TLongHashSet;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Random;
-import java.util.Set;
 
 /**
  * @author David (_Esel)
@@ -18,8 +20,8 @@ public class ExpressionGenerator {
     private static final Random random = new Random();
     private final long[] numbers;
     private final Operator[] operators;
-    private final Set<Long> duplicatedResults = new HashSet<>();
-    private final Map<Long, Operator[]> results = new HashMap<>();
+    private final TLongHashSet duplicatedResults = new TLongHashSet();
+    private final TLongObjectHashMap<Operator[]> results = new TLongObjectHashMap<>();
 
     public ExpressionGenerator(int places) {
         numbers = new long[places];
@@ -28,6 +30,9 @@ public class ExpressionGenerator {
 
     private void fillRandom() {
         numbers[0] = random.nextInt(9) + 1;
+        if (numbers.length == 1) {
+            return;
+        }
         do {
             numbers[1] = random.nextInt(9) + 1;
         } while (numbers[0] % numbers[1] != 0);
@@ -38,23 +43,13 @@ public class ExpressionGenerator {
     }
 
     private ExpressionCandidates export() {
-        return new ExpressionCandidates(numbers.clone(), results);
+        Map<Long, Operator[]> export = new HashMap<>();
+        results.forEachEntry((a, b) -> {
+            export.put(a, b);
+            return true;
+        });
+        return new ExpressionCandidates(numbers.clone(), export);
     }
-
-    long[] numbers() {
-        return numbers;
-    }
-
-    public ExpressionCandidates generateSet() {
-        //generateOperators(0);
-        if (results.size() == 0) {
-            return null;
-        }
-        return export();
-    }
-
-    private static long tryied;
-    private static long good;
 
     public ExpressionCandidates generate() {
         long[] strokeStore = new long[numbers.length];
@@ -63,17 +58,9 @@ public class ExpressionGenerator {
             duplicatedResults.clear();
             results.clear();
             fillRandom();
-            System.out.println("try with numbers: " + Arrays.toString(numbers));
+            blockStore[0] = numbers[0];
             generateOperators(0, numbers[0], strokeStore, blockStore, false, -1);
-            tryied++;
         } while (results.size() == 0);
-        /*results.forEach((aLong, operators) -> {
-            System.out.println(aLong + " " + Arrays.toString(operators));
-        });
-        System.out.println(results);
-        System.out.println("^^ was good");
-        good++;
-        System.out.println(good + " / " + tryied + " " + (good / (float) tryied));*/
         return export();
     }
 
@@ -87,32 +74,24 @@ public class ExpressionGenerator {
         }
     }
 
-    //1+2+3*4*5*6*7+8+9+10*11*12+13
-    private static final Operator[] TEST_OP = new Operator[] {
-        MULTIPLY, MULTIPLY, MULTIPLY, MULTIPLY, MULTIPLY, ADD, SUBTRACT, MULTIPLY, /*SUBTRACT, ADD, SUBTRACT, MULTIPLY, ADD, SUBTRACT*/
-    };
-
     private void generateOperators(int index, long result,
-                                   long[] strokeStore, long[] blockStore,
+                                   long[] results, long[] blockStore,
                                    boolean strokeBlock, int addStroke) {
         if (index == numbers.length - 1) {
             pushResult(result);
             return;
         }
 
-        strokeStore[index] = result;
-        if (index == 0) {
-            blockStore[0] = numbers[0];
-        }
+        results[index] = result;
         int nextIndex = index + 1;
         long right = numbers[nextIndex];
         {
             operators[index] = ADD;
-            generateOperators(nextIndex, result + right, strokeStore, blockStore, true, -1);
+            generateOperators(nextIndex, result + right, results, blockStore, true, -1);
         }
         {
             operators[index] = SUBTRACT;
-            generateOperators(nextIndex, result - right, strokeStore, blockStore, true, -1);
+            generateOperators(nextIndex, result - right, results, blockStore, true, -1);
         }
         {
             operators[index] = MULTIPLY;
@@ -121,9 +100,9 @@ public class ExpressionGenerator {
                 long block = numbers[index] * right;
                 blockStore[index + 1] = block;
                 if (operators[index - 1] == SUBTRACT) {
-                    res = strokeStore[index - 1] - block;
+                    res = results[index - 1] - block;
                 } else if (operators[index - 1] == ADD) {
-                    res = strokeStore[index - 1] + block;
+                    res = results[index - 1] + block;
                 } else {
                     throw new IllegalStateException();
                 }
@@ -133,15 +112,15 @@ public class ExpressionGenerator {
                 blockStore[index + 1] = res;
                 if (addStroke != -1) {
                     if (operators[addStroke] == SUBTRACT) {
-                        res = strokeStore[addStroke] - res;
+                        res = results[addStroke] - res;
                     } else if (operators[addStroke] == ADD) {
-                        res = strokeStore[addStroke] + res;
+                        res = results[addStroke] + res;
                     } else {
                         throw new IllegalStateException();
                     }
                 }
             }
-            generateOperators(nextIndex, res, strokeStore, blockStore, false, addStroke);
+            generateOperators(nextIndex, res, results, blockStore, false, addStroke);
         }
         {
             operators[index] = DIVIDE;
@@ -153,14 +132,14 @@ public class ExpressionGenerator {
                 long block = numbers[index] / right;
                 blockStore[index + 1] = block;
                 if (operators[index - 1] == SUBTRACT) {
-                    res = strokeStore[index - 1] - block;
+                    res = results[index - 1] - block;
                 } else if (operators[index - 1] == ADD) {
-                    res = strokeStore[index - 1] + block;
+                    res = results[index - 1] + block;
                 } else {
                     throw new IllegalStateException();
                 }
                 addStroke = index - 1;
-                generateOperators(nextIndex, res, strokeStore, blockStore, false, addStroke);
+                generateOperators(nextIndex, res, results, blockStore, false, addStroke);
             } else {
                 if (blockStore[index] % right != 0) {
                     return;
@@ -169,22 +148,21 @@ public class ExpressionGenerator {
                 blockStore[index + 1] = res;
                 if (addStroke != -1) {
                     if (operators[addStroke] == SUBTRACT) {
-                        res = strokeStore[addStroke] - res;
+                        res = results[addStroke] - res;
                     } else if (operators[addStroke] == ADD) {
-                        res = strokeStore[addStroke] + res;
+                        res = results[addStroke] + res;
                     } else {
                         throw new IllegalStateException();
                     }
                 }
-                generateOperators(nextIndex, res, strokeStore, blockStore, false, addStroke);
+                generateOperators(nextIndex, res, results, blockStore, false, addStroke);
             }
         }
     }
 
     public static void main(String[] args) {
-        ExpressionGenerator generator = new ExpressionGenerator(15);
-        //generator.generate();
-        //generator.generateOperators(0, 5, new long[9], false, -1);
+        int places = args.length == 0 ? 15 : Integer.parseInt(args[0]);
+        ExpressionGenerator generator = new ExpressionGenerator(places);
         while (true) {
             long start = System.currentTimeMillis();
             generator.generate();
