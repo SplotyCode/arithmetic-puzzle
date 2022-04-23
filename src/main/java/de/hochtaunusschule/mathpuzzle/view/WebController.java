@@ -43,7 +43,7 @@ public class WebController {
     public Puzzle randomPuzzle(@RequestParam("operands") int operands) {
         long took = System.currentTimeMillis();
         //Expression expression = Generator.generate(operands);
-        ExpressionGenerator generator = new ExpressionGenerator(operands);
+        ExpressionGenerator generator = new ExpressionGenerator(operands + 1);
         Expression expression = generator.generate().pickAny();
         System.out.println("Took: " + (System.currentTimeMillis() - took));
         return new Puzzle(
