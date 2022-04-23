@@ -1,16 +1,18 @@
-package de.hochtaunusschule.mathpuzzle.bruteforce;
+package de.hochtaunusschule.mathpuzzle.api;
 
-import de.hochtaunusschule.mathpuzzle.api.Expression;
+import de.hochtaunusschule.mathpuzzle.bruteforce.Operator;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.ToString;
 
 /**
  * @author David (_Esel)
  */
+@ToString
 @RequiredArgsConstructor
 public class ExpressionCandidates {
     private static final Random random = new Random();

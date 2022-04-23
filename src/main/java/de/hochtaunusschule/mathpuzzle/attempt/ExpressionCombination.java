@@ -3,7 +3,7 @@ package de.hochtaunusschule.mathpuzzle.attempt;
 import de.hochtaunusschule.mathpuzzle.api.DuplicateTracker;
 import de.hochtaunusschule.mathpuzzle.api.Expression;
 import de.hochtaunusschule.mathpuzzle.bruteforce.Calculation;
-import de.hochtaunusschule.mathpuzzle.bruteforce.ExpressionCandidates;
+import de.hochtaunusschule.mathpuzzle.api.ExpressionCandidates;
 import de.hochtaunusschule.mathpuzzle.bruteforce.Operator;
 import de.hochtaunusschule.mathpuzzle.investigate.CombinationRandomNumber;
 import java.util.Arrays;
@@ -121,6 +121,7 @@ public class ExpressionCombination {
         return new Expression(result.getKey(), numbers, operators);
     }
 
+    /* um so höher um so besser */
     private static float rateInterest(Operator[] operators) {
         float goal = operators.length / 4F;
         float error = 0;

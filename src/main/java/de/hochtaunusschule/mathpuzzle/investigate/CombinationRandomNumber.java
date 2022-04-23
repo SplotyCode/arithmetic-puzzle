@@ -1,7 +1,7 @@
 package de.hochtaunusschule.mathpuzzle.investigate;
 
 import de.hochtaunusschule.mathpuzzle.bruteforce.Calculation;
-import de.hochtaunusschule.mathpuzzle.bruteforce.ExpressionCandidates;
+import de.hochtaunusschule.mathpuzzle.api.ExpressionCandidates;
 import de.hochtaunusschule.mathpuzzle.bruteforce.Operator;
 import java.util.Arrays;
 import java.util.HashMap;
