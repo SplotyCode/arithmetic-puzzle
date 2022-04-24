@@ -63,7 +63,7 @@ public class AsyncExpressionGenerator {
             fillRandom();
             System.out.println("filll");
             blockStore[0] = numbers[0];
-            generateOperators(0, numbers[0], new Operator[numbers.length - 1], strokeStore, blockStore, false, -1, false);
+            generateOperators(0, numbers[0], null, null, new Operator[numbers.length - 1], strokeStore, blockStore, false, -1, false);
             try {
                 countDownLatch.await();
             } catch (InterruptedException e) {
@@ -73,7 +73,7 @@ public class AsyncExpressionGenerator {
         return export();
     }
 
-    private synchronized void pushResult(long result, Operator[] operators) {
+    private void pushResult(long result, Operator[] operators) {
         if (result <= 0 || duplicatedResults.contains(result)) {
             return;
         }
@@ -83,19 +83,33 @@ public class AsyncExpressionGenerator {
         }
     }
 
-    private void generateOperators(int index, long result,
+    private void generateOperators(int index, long result, TLongHashSet duplicatedResults,
+                                   TLongObjectHashMap<Operator[]> resultsMap,
                                    Operator[] operators, long[] results, long[] blockStore,
                                    boolean strokeBlock, int addStroke, boolean split) {
         int stokeCopy = addStroke;
         if (index == numbers.length - 1) {
-            pushResult(result, operators);
+            if (result <= 0 || duplicatedResults.contains(result)) {
+                return;
+            }
+            if (resultsMap.put(result, operators.clone()) != null) {
+                resultsMap.remove(result);
+                duplicatedResults.add(result);
+            }
             return;
         } else if (!split && index == threadSplit) {
             Operator[] cloneOp = operators.clone();
             long[] cloneBlock = blockStore.clone();
             long[] cloneResults = results.clone();
             new Thread(() -> {
-                generateOperators(index, result, cloneOp, cloneResults, cloneBlock, strokeBlock, stokeCopy, true);
+                TLongObjectHashMap<Operator[]> finalRes = new TLongObjectHashMap<>();
+                generateOperators(index, result, new TLongHashSet(), finalRes, cloneOp, cloneResults, cloneBlock, strokeBlock, stokeCopy, true);
+                synchronized (AsyncExpressionGenerator.this) {
+                    finalRes.forEachEntry((a, b) -> {
+                        pushResult(a, b);
+                        return true;
+                    });
+                }
                 countDownLatch.countDown();
             }).start();
             return;
@@ -110,11 +124,11 @@ public class AsyncExpressionGenerator {
         long right = numbers[nextIndex];
         {
             operators[index] = ADD;
-            generateOperators(nextIndex, result + right, operators, results, blockStore, true, -1, split);
+            generateOperators(nextIndex, result + right, duplicatedResults, resultsMap, operators, results, blockStore, true, -1, split);
         }
         {
             operators[index] = SUBTRACT;
-            generateOperators(nextIndex, result - right, operators, results, blockStore, true, -1, split);
+            generateOperators(nextIndex, result - right, duplicatedResults, resultsMap, operators, results, blockStore, true, -1, split);
         }
         {
             operators[index] = MULTIPLY;
@@ -143,7 +157,7 @@ public class AsyncExpressionGenerator {
                     }
                 }
             }
-            generateOperators(nextIndex, res, operators, results, blockStore, false, addStroke, split);
+            generateOperators(nextIndex, res, duplicatedResults, resultsMap, operators, results, blockStore, false, addStroke, split);
         }
         {
             operators[index] = DIVIDE;
@@ -162,7 +176,7 @@ public class AsyncExpressionGenerator {
                     throw new IllegalStateException();
                 }
                 addStroke = index - 1;
-                generateOperators(nextIndex, res, operators, results, blockStore, false, addStroke, split);
+                generateOperators(nextIndex, res, duplicatedResults, resultsMap, operators, results, blockStore, false, addStroke, split);
             } else {
                 if (blockStore[index] % right != 0) {
                     return;
@@ -178,7 +192,7 @@ public class AsyncExpressionGenerator {
                         throw new IllegalStateException();
                     }
                 }
-                generateOperators(nextIndex, res, operators, results, blockStore, false, addStroke, split);
+                generateOperators(nextIndex, res, duplicatedResults, resultsMap, operators, results, blockStore, false, addStroke, split);
             }
         }
     }

@@ -95,7 +95,7 @@ public class CombinationRandomNumber {
     }
 
     public static void main(String[] args) {
-        CombinationRandomNumber generator = new CombinationRandomNumber(15);
+        CombinationRandomNumber generator = new CombinationRandomNumber(14);
         while (true) {
             long start = System.currentTimeMillis();
             generator.generate();

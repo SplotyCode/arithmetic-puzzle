@@ -40,8 +40,8 @@ public class BruteforceSolver {
     public static void main(String[] args) {
         WebController webController = new WebController();
        // while (true) {
-        //    WebController.Puzzle puzzle = webController.randomPuzzle(15);
-          //  System.out.println("Result from api is " + Arrays.toString(puzzle.getOperators()) + " " + Arrays.toString(puzzle.getNumbers()) + " " + puzzle.getResult());
+        //    WebController.Puzzle puzzle = wgebController.randomPuzzle(15);
+        //          //  System.out.println("Result from api is " + Arrays.toStrin(puzzle.getOperators()) + " " + Arrays.toString(puzzle.getNumbers()) + " " + puzzle.getResult());
            /* de.hochtaunusschule.mathpuzzle.generate.ExpressionGenerator
                 generator = new ExpressionGenerator(15);
             long generate = System.currentTimeMillis();
@@ -50,7 +50,7 @@ public class BruteforceSolver {
             System.out.println("Generated in " + (ended - generate));
             System.out.println("testing " + Arrays.toString(expression.numbers()) + " " + expression.result() + " " +
                 Arrays.toString(expression.operators()));*/
-            BruteforceSolver solver = new BruteforceSolver(new long[] {5 , 4 , 2 , 8 , 9 , 4 , 1 , 8}, 604);
+            BruteforceSolver solver = new BruteforceSolver(new long[] {9,1,7,4,5,9,9,5,3,3,3,4,1,7,6,1,5,1,1}, 43641);
             solver.generateOperators(0);
             //System.out.println("tested in " + (System.currentTimeMillis() - ended));
       //  }
