@@ -32,7 +32,9 @@ dependencies {
 bootRun {
     jvmArgs = ["-DXmx4G", "-Xmx4G"]
 }
-
+tasks.named('bootJar') {
+    launchScript()
+}
 test {
     useJUnitPlatform()
 }
