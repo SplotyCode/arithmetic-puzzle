@@ -4,7 +4,7 @@ plugins {
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
 }
 
-group 'org.example'
+group 'de.hochtaunusschule'
 version '1.0-SNAPSHOT'
 
 repositories {
