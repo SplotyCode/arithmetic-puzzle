@@ -76,7 +76,7 @@ class ExpressionGeneratorTest {
     }
 
     private void generateOperators(int index, long result,
-                                   long[] strokeStore, long blockResult,
+                                   long[] results, long blockResult,
                                    boolean strokeBlock, int addStroke) {
         if (index == numbers.length - 1) {
             completed = true;
@@ -84,74 +84,44 @@ class ExpressionGeneratorTest {
             return;
         }
 
-        strokeStore[index] = result;
+        results[index] = result;
         int nextIndex = index + 1;
         long right = numbers[nextIndex];
         if (operators[index] == ADD) {
             operators[index] = ADD;
-            generateOperators(nextIndex, result + right, strokeStore, 1, true, -1);
+            generateOperators(nextIndex, result + right, results, 1, true, -1);
         } else if (operators[index] == SUBTRACT) {
             operators[index] = SUBTRACT;
-            generateOperators(nextIndex, result - right, strokeStore, 1, true, -1);
+            generateOperators(nextIndex, result - right, results, 1, true, -1);
         } else if (operators[index] == MULTIPLY) {
             operators[index] = MULTIPLY;
-            long res;
             if (strokeBlock) { /* vorher + - */
-                blockResult = numbers[index] * right;
-                if (operators[index - 1] == SUBTRACT) {
-                    res = strokeStore[index - 1] - blockResult;
-                } else if (operators[index - 1] == ADD) {
-                    res = strokeStore[index - 1] + blockResult;
-                } else {
-                    throw new IllegalStateException();
-                }
+                blockResult = numbers[index];
                 addStroke = index - 1;
-            } else {
-                blockResult = res = blockResult * right;
-                if (addStroke != -1) {
-                    if (operators[addStroke] == SUBTRACT) {
-                        res = strokeStore[addStroke] - res;
-                    } else if (operators[addStroke] == ADD) {
-                        res = strokeStore[addStroke] + res;
-                    } else {
-                        throw new IllegalStateException();
-                    }
-                }
             }
-            generateOperators(nextIndex, res, strokeStore, blockResult, false, addStroke);
+            blockResult *= right;
+            long res = blockResult;
+            if (addStroke != -1) {
+                long add = operators[addStroke] == SUBTRACT ? -blockResult : blockResult;
+                res = results[addStroke] + add;
+            }
+            generateOperators(nextIndex, res, results, blockResult, false, addStroke);
         } else if (operators[index] == DIVIDE) {
             operators[index] = DIVIDE;
-            long res;
             if (strokeBlock) { /* vorher + - */
-                if (numbers[index] % right != 0) {
-                    return;
-                }
-                blockResult = numbers[index] / right;
-                if (operators[index - 1] == SUBTRACT) {
-                    res = strokeStore[index - 1] - blockResult;
-                } else if (operators[index - 1] == ADD) {
-                    res = strokeStore[index - 1] + blockResult;
-                } else {
-                    throw new IllegalStateException();
-                }
+                blockResult = numbers[index];
                 addStroke = index - 1;
-                generateOperators(nextIndex, res, strokeStore, blockResult, false, addStroke);
-            } else {
-                if (blockResult % right != 0) {
-                    return;
-                }
-                res = blockResult = blockResult / right;
-                if (addStroke != -1) {
-                    if (operators[addStroke] == SUBTRACT) {
-                        res = strokeStore[addStroke] - res;
-                    } else if (operators[addStroke] == ADD) {
-                        res = strokeStore[addStroke] + res;
-                    } else {
-                        throw new IllegalStateException();
-                    }
-                }
-                generateOperators(nextIndex, res, strokeStore, blockResult, false, addStroke);
             }
+            if (blockResult % right != 0) {
+                return;
+            }
+            blockResult /= right;
+            long res = blockResult;
+            if (addStroke != -1) {
+                long add = operators[addStroke] == SUBTRACT ? -blockResult : blockResult;
+                res = results[addStroke] + add;
+            }
+            generateOperators(nextIndex, res, results, blockResult, false, addStroke);
         }
     }
 }

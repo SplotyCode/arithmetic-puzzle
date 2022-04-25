@@ -50,7 +50,7 @@ public class BruteforceSolver {
             System.out.println("Generated in " + (ended - generate));
             System.out.println("testing " + Arrays.toString(expression.numbers()) + " " + expression.result() + " " +
                 Arrays.toString(expression.operators()));*/
-            BruteforceSolver solver = new BruteforceSolver(new long[] {9,1,7,4,5,9,9,5,3,3,3,4,1,7,6,1,5,1,1}, 43641);
+            BruteforceSolver solver = new BruteforceSolver(new long[] {8,8,9,8,3,5,9,7,9,9,2}, 8063);
             solver.generateOperators(0);
             //System.out.println("tested in " + (System.currentTimeMillis() - ended));
       //  }
