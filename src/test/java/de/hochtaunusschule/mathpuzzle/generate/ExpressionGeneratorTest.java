@@ -69,59 +69,66 @@ class ExpressionGeneratorTest {
         this.result = result;
         System.out.println("test start");
         completed = false;
-        generateOperators(0, numbers[0], new long[numbers.length], numbers[0], false, -1);
+        generateOperators(0, numbers[0], numbers[0], 0, numbers[0], false, false, false);
         if (!completed) {
             fail("Not run");
         }
     }
 
     private void generateOperators(int index, long result,
-                                   long[] results, long blockResult,
-                                   boolean strokeBlock, int addStroke) {
+                                   long previousResult, long addResult, long blockResult,
+                                   boolean strokeBlock, boolean negateStroke, boolean wasNegative) {
         if (index == numbers.length - 1) {
             completed = true;
             Assertions.assertEquals(this.result, result);
             return;
         }
-
-        results[index] = result;
         int nextIndex = index + 1;
         long right = numbers[nextIndex];
         if (operators[index] == ADD) {
             operators[index] = ADD;
-            generateOperators(nextIndex, result + right, results, 1, true, -1);
+            generateOperators(nextIndex, result + right, result, 0, 1, true, false, false);
         } else if (operators[index] == SUBTRACT) {
             operators[index] = SUBTRACT;
-            generateOperators(nextIndex, result - right, results, 1, true, -1);
+            generateOperators(nextIndex, result - right, result, 0, 1, true, false, true);
         } else if (operators[index] == MULTIPLY) {
             operators[index] = MULTIPLY;
-            if (strokeBlock) { /* vorher + - */
-                blockResult = numbers[index];
-                addStroke = index - 1;
-            }
-            blockResult *= right;
-            long res = blockResult;
-            if (addStroke != -1) {
-                long add = operators[addStroke] == SUBTRACT ? -blockResult : blockResult;
-                res = results[addStroke] + add;
-            }
-            generateOperators(nextIndex, res, results, blockResult, false, addStroke);
+            multiplication(index, result, right, previousResult, addResult, blockResult, strokeBlock, negateStroke, wasNegative);
         } else if (operators[index] == DIVIDE) {
             operators[index] = DIVIDE;
-            if (strokeBlock) { /* vorher + - */
-                blockResult = numbers[index];
-                addStroke = index - 1;
-            }
-            if (blockResult % right != 0) {
-                return;
-            }
-            blockResult /= right;
-            long res = blockResult;
-            if (addStroke != -1) {
-                long add = operators[addStroke] == SUBTRACT ? -blockResult : blockResult;
-                res = results[addStroke] + add;
-            }
-            generateOperators(nextIndex, res, results, blockResult, false, addStroke);
+            divide(index, result, right, previousResult, addResult, blockResult, strokeBlock, negateStroke, wasNegative);
         }
+    }
+
+    private void multiplication(int index, long result, long right,
+                                long previousResult, long addResult, long blockResult,
+                                boolean strokeBlock, boolean negateStroke, boolean wasNegative) {
+        long add = addResult;
+        if (strokeBlock) { /* vorher + - */
+            blockResult = numbers[index];
+            add = previousResult;
+            addResult = previousResult;
+            negateStroke = wasNegative;
+        }
+        blockResult *= right;
+        long res = negateStroke ? add - blockResult : add + blockResult;
+        generateOperators(index + 1, res, result, addResult, blockResult, false, negateStroke, false);
+    }
+
+    private void divide(int index, long result, long right,
+                        long previousResult, long addResult, long blockResult,
+                        boolean strokeBlock, boolean negateStroke, boolean wasNegative) {
+        long add = addResult;
+        if (strokeBlock) { /* vorher + - */
+            blockResult = numbers[index];
+            add = previousResult;
+            negateStroke = wasNegative;
+        }
+        if (blockResult % right != 0) {
+            return;
+        }
+        blockResult /= right;
+        long res = negateStroke ? add - blockResult : add + blockResult;
+        generateOperators(index + 1, res, result, addResult, blockResult, false, negateStroke, false);
     }
 }
